@@ -30,23 +30,13 @@ Example
 ```cup
 func this_function_returns_hello() -> String {
     returning String myreturning = "Hello";
-}
+    // or without specifing the type of the variable, because we do not need it as it's already written in the beginning of the function so you can do that
+    // returning myreturning = "Hello";
+}  
 ```
 The function now returns Hello!
 <br>
-The returning variable can take another type for instance
-```cup
-use (
-    "file-manager"
-)
-
-func delete_all(normal: Dict, to_delete: String) -> Dict {
-    returning const Dict myreturning = normal.remove(to_delete);
-    FileDelete(normal[to_delete]);
-}
-
-```
-(You can also write const returning Dict myreturning = normal.remove(to_delete))
+Returning can only be a let and will automatically be a let
 <br>
 In CupLang there are 5 variables types!
 <br>
@@ -88,7 +78,7 @@ Dictionaries store key-value pairs, allowing you to associate values with unique
 Example:
 
 ```cup
-Dict person = dict{
+Dict person = {
     "name": "John",
     "age": 30,
     "city": "New York"
@@ -100,7 +90,7 @@ Arrays store lists of values. Each value can be accessed using its index.
 Example:
 
 ```cup
-Array fruits = array["apple", "banana", "orange"];
+Array fruits = ["apple", "banana", "orange"];
 ```
 ## Functions
 ### Main
@@ -232,7 +222,6 @@ Comparing if the type of the values are not the same
 ### <
 Comparing if one value is smaller then the other (For integer/float only if variables are strings the length of the string are going to be compared)
 ### >
-### <
 Comparing if one value is bigger then the other (For integer/float only if variables are strings the length of the string are going to be compared)
 ### !
 Reverse the condition
@@ -274,7 +263,7 @@ if (hello == "Hello, world!") {
 }
 ```
 ## finalif
-The new one, finalif is a function onlyif that will end the function in a proper way
+The new one, finalif is an if that will end the function in a proper way
 <br>
 For example:
 <br>
@@ -307,4 +296,135 @@ func Hello(String argument) {
     }
 }
 ```
-# Use
+# Use/import
+To import modules and files it's a bit complex sometimes but not with cupLang!
+<br>
+use and import exists!
+<br>
+Example :
+```cup
+use (
+    "BetterStd"
+)
+
+import (
+    "myotherfile.cup"
+)
+```
+In cuplang import and use are like include they include everything that is in the file to your now code
+<br>
+Example :
+<br>
+my_cool_file.cup
+```cup
+use (
+    "BetterStd"
+)
+
+func Hello(String ok) {
+    BetterPrint(ok);
+}
+```
+<br>
+Main.cup
+```cup
+import (
+    "my_cool_file.cup"
+)
+
+func Main() {
+    Hello("ok");
+    BetterPrint("You can also use the imports that are in the other files!");
+}
+```
+So welcome to usecenters!
+<br>
+usecenters.cup
+```cup
+use (
+    "BetterStd",
+    "http"
+)
+```
+main.cup
+```cup
+import (
+    "./usecenters.cup"
+)
+
+func Main() {
+    BetterPrint("Hello!");
+}
+```
+Oh yeah and you can do that!
+<br>
+hello.cup
+```cup
+func Main() {
+    BetterPrint("Hok");
+}
+```
+main.cup
+```cup
+import (
+    "hello.cup"
+)
+```
+# Translation
+## How does CupLang works?
+CupLang will translate itself between layers of differents code into arriving to asm for example :
+<br>
+Layer 1
+```cup
+Int result = 7 * 8 / 29 ^ 12;
+```
+Layer n.2
+```cup
+let Int result = multiplication(7, division(8, power(29, 12)));
+```
+layer n.3
+```asm
+let Int result = 0;
+push 29
+push 12
+push result
+call puissance
+push 8
+push result
+push result
+call division
+push 7
+push result
+push result
+call mutliplication
+```
+last layer
+```asm
+section .data:
+    result dd 0
+
+mov eax, result
+push 29
+push 12
+push eax
+call puissance
+push 8
+push eax
+push eax
+call division
+push 7
+push eax
+push eax
+call mutliplication
+mov result, eax
+```
+And we plan on making the language more simple in the future such as adding rare typing only
+<br>
+Example :
+```
+hello = "hi";
+```
+The " tells us it's a String so we could delete the type
+# tomake :
+making docs for commands<br>
+Making docs for speed comparason
